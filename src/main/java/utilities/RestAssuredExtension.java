@@ -17,7 +17,7 @@ public class RestAssuredExtension {
     public static RequestSpecification Request;
 
     public RestAssuredExtension(){
-        //arange
+        //arangea
         RequestSpecBuilder builder = new RequestSpecBuilder();
         builder.setBaseUri("http://localhost:3000");
         builder.setContentType(ContentType.JSON);
