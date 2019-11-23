@@ -22,7 +22,7 @@ public class GetPostSteps {
 
     @Then("^I should see the first_name as \"([^\"]*)\"$")
     public void iShouldSeeTheFirst_nameAs(String firstName) throws Throwable {
-        assertThat(response.getBody().jsonPath().get("first_name"), hasItem("Sebastian"));
+        assertThat(response.getBody().jsonPath().get("first_name"), hasItem(firstName));
     }
 
     @Then("I should see the employees names")
@@ -34,7 +34,4 @@ public class GetPostSteps {
     public void iShouldSeeVerifyGETParameter() {
         BDDStyledMethod.PerformQueryParameter();
     }
-
-
-
 }

@@ -8,8 +8,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class BDDStyledMethod {
 
-
-
     public static void SimpleGETEmployee(String employeeNumber){
         given().contentType(ContentType.JSON).
                 when().get(String.format("http://localhost:3000/employees/%s",employeeNumber)).
