@@ -43,8 +43,11 @@ public class RestAssuredExtension {
         return null;
     }
 
-//    public static void GetOps(String url) throws URISyntaxException {
-//        Request.get(new URI(url));
-//    }
+
+    public static ResponseOptions<Response> PostOpsWithBodyAndPathParams(String url, Map<String, String> pathParams, Map<String, String> body) {
+        Request.pathParams(pathParams);
+        Request.body(body);
+        return Request.post(url);
+    }
 
 }

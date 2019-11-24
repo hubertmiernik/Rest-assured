@@ -1,6 +1,9 @@
 package steps;
 
 import io.restassured.http.ContentType;
+import org.hamcrest.core.Is;
+
+import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
@@ -8,19 +11,19 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class BDDStyledMethod {
 
-    public static void SimpleGETEmployee(String employeeNumber){
+    public static void SimpleGETPost(String employeeNumber){
         given().contentType(ContentType.JSON).
-                when().get(String.format("http://localhost:3000/employees/%s",employeeNumber)).
-                then().body("first_name", is("Sebastian"));
+                when().get(String.format("http://localhost:3000/posts/%s",employeeNumber)).
+                then().body("author", is("Karthik KK"));
 
     }
 
     public static void PerformContainsCollection(){
         given().contentType(ContentType.JSON).
                 when()
-                .get("http://localhost:3000/employees/")
+                .get("http://localhost:3000/posts/")
                 .then()
-                .body("first_name", containsInAnyOrder("Sebastian", "Steve", "Ann")).statusCode(200);
+                .body("author", containsInAnyOrder("Karthik KK", "Karthik KK", null)).statusCode(200);
     }
 
     //path parameter
@@ -28,11 +31,11 @@ public class BDDStyledMethod {
         given()
                 .contentType(ContentType.JSON).
         with().
-                pathParam("employee", 1).
+                pathParam("post", 1).
         when().
-                get("http://localhost:3000/employees/{employee}").
+                get("http://localhost:3000/posts/{post}").
         then().
-                body("first_name", containsString("Sebastian"));
+                body("author", containsString("Karthik KK"));
 
     }
 
@@ -42,10 +45,32 @@ public class BDDStyledMethod {
                 .contentType(ContentType.JSON)
                 .queryParam("id", "1").
         when()
-                .get("http://localhost:3000/employees/").
+                .get("http://localhost:3000/posts/").
         then()
-                .body("first_name", hasItem("Sebastian"));
+                .body("author", hasItem("Karthik KK"));
     }
+
+    public static void PerformPOSTWithBodyParameter(){
+        HashMap<String, String> postContent = new HashMap<>();
+        postContent.put("id", "6");
+        postContent.put("title", "Test");
+        postContent.put("author", "Hubert");
+
+        given()
+                .contentType(ContentType.JSON)
+        .with()
+                .body(postContent).
+        when()
+                .post("http://localhost:3000/posts/").
+        then()
+                .body("author", Is.is("Hubert"));
+
+
+
+
+    }
+
+
 
 
 
