@@ -5,13 +5,15 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseOptions;
+import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNot;
 import utilities.RestAssuredExtension;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -48,16 +50,28 @@ public class POSTProfileSteps {
 
 
 
-    @Given("I ensure to Perform POST operation for {string} with body as")
-    public void iEnsureToPerformPOSTOperationForWithBodyAs(String url) {
+//    @Given("I ensure to Perform POST operation for {string} with body as")
+//    public void iEnsureToPerformPOSTOperationForWithBodyAs(String url) {
+//        //set body
+//        HashMap<String, String> body = new HashMap<>();
+//        body.put("id", "12");
+//        body.put("title", "API Testing course");
+//        body.put("author", "ExecuteAutomation");
+//
+//        //perform post operation
+//        response = RestAssuredExtension.PostOpsWithBody(url, body);
+//    }
+
+    @Given("I ensure to Perform POST operation for {string} with body as id = {string}, title = {string} and author = {string}")
+    public void iEnsureToPerformPOSTOperationForWithBodyAsIdTitleAndAuthor(String url, String id, String title, String author) {
         //set body
         HashMap<String, String> body = new HashMap<>();
-        body.put("id", "12");
-        body.put("title", "API Testing course");
-        body.put("author", "ExecuteAutomation");
+        body.put("id", id);
+        body.put("title", title);
+        body.put("author", author);
 
         //perform post operation
-        RestAssuredExtension.PostOpsWithBody(url, body);
+        response = RestAssuredExtension.PostOpsWithBody(url, body);
     }
 
     @And("I Perform DELETE operation for {string}")
@@ -75,7 +89,7 @@ public class POSTProfileSteps {
         Map<String, String> pathParams = new HashMap<>();
         pathParams.put("postid", "12");
 
-        response = RestAssuredExtension.GetOpsWithPathParameter(url, pathParams);
+        response = RestAssuredExtension.GetWithPathParams(url, pathParams);
     }
 
 
@@ -89,10 +103,32 @@ public class POSTProfileSteps {
 
     @Then("I should see the body with title as {string}")
     public void iShouldSeeTheBodyWithTitleAs(String title) {
-        assertThat(response.getBody().jsonPath().get("title"), IsNot.not(title));
-//        System.out.println(response.getBody().prettyPrint());
+        assertThat(response.getBody().jsonPath().get("title"), hasItem(title));
+
     }
 
+
+    @And("I Perform PUT operation for {string}")
+    public void iPerformPUTOperationFor(String url) {
+
+        Map<String, String> body = new HashMap<>();
+        body.put("id", "12");
+        body.put("title", "API Testing course");
+        body.put("author", "Hubert");
+
+        Map<String, String> pathParams = new HashMap<>();
+        pathParams.put("postid", "12");
+
+        RestAssuredExtension.PutOpsWithBodyAndPathParams(url, body, pathParams);
+
+    }
+
+
+    @Then("I shouldn't see the body with title as {string}")
+    public void iShouldnTSeeTheBodyWithTitleAs(String title) {
+        assertThat(response.getBody().jsonPath().get("title"), not(hasItem(title)));
+
+    }
 }
 
 
