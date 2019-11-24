@@ -25,29 +25,37 @@ public class RestAssuredExtension {
         Request = RestAssured.given().spec(requestSpec);
     }
 
-    public static void GetOpsWithPathParameter(String url, Map<String, String> pathParams){
+    public static ResponseOptions<Response> GetOpsWithPathParameter(String url, Map<String, String> pathParams){
         Request.pathParams(pathParams);
-        try {
-            Request.get(new URI(url));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        return Request.get(url);
     }
 
     public static ResponseOptions<Response> GetOps(String url) {
-        try {
-            return Request.get(new URI(url));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return Request.get(url);
     }
-
 
     public static ResponseOptions<Response> PostOpsWithBodyAndPathParams(String url, Map<String, String> pathParams, Map<String, String> body) {
         Request.pathParams(pathParams);
         Request.body(body);
         return Request.post(url);
     }
+
+    public static ResponseOptions<Response> PostOpsWithBody(String url, Map<String, String> body) {
+        Request.body(body);
+        return Request.post(url);
+    }
+
+    public static ResponseOptions<Response> DeleteOpsWithPathParams(String url,Map<String, String> pathParams)  {
+        //Request.pathParams(pathParams);
+        Request.pathParams("postid", "12");
+        return Request.delete(url);
+    }
+
+    public static ResponseOptions<Response> GetWithPathParams(String url, Map<String, String> pathParams){
+        Request.pathParams(pathParams);
+        return Request.get(url);
+    }
+
+
 
 }
